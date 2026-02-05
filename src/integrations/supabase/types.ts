@@ -14,13 +14,140 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string
+          id: string
+          name: string
+          total_seats: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date: string
+          id?: string
+          name: string
+          total_seats?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string
+          id?: string
+          name?: string
+          total_seats?: number
+        }
+        Relationships: []
+      }
+      seat_bookings: {
+        Row: {
+          booked_at: string
+          event_id: string
+          id: string
+          seat_number: number
+          teacher_id: string
+        }
+        Insert: {
+          booked_at?: string
+          event_id: string
+          id?: string
+          seat_number: number
+          teacher_id: string
+        }
+        Update: {
+          booked_at?: string
+          event_id?: string
+          id?: string
+          seat_number?: number
+          teacher_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seat_bookings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "seat_bookings_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teachers: {
+        Row: {
+          created_at: string
+          faculty_email: string
+          id: string
+          name: string
+          phone_number: string
+          sic_number: string
+          user_id: string | null
+          visit_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          faculty_email: string
+          id?: string
+          name: string
+          phone_number: string
+          sic_number: string
+          user_id?: string | null
+          visit_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          faculty_email?: string
+          id?: string
+          name?: string
+          phone_number?: string
+          sic_number?: string
+          user_id?: string | null
+          visit_order?: number | null
+        }
+        Relationships: []
+      }
+      voucher_claims: {
+        Row: {
+          claimed_at: string
+          id: string
+          teacher_id: string
+          voucher_type: string
+        }
+        Insert: {
+          claimed_at?: string
+          id?: string
+          teacher_id: string
+          voucher_type: string
+        }
+        Update: {
+          claimed_at?: string
+          id?: string
+          teacher_id?: string
+          voucher_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voucher_claims_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: true
+            referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_teacher_id: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never

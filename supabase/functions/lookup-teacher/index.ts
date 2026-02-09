@@ -30,11 +30,11 @@
      );
  
      // Lookup teacher by SIC number
-     const { data, error } = await supabaseAdmin
-       .from("teachers")
-       .select("faculty_email")
-       .eq("sic_number", sic_number)
-       .single();
+      const { data, error } = await supabaseAdmin
+        .from("teachers")
+        .select("faculty_email")
+        .eq("sic_number", sic_number)
+        .maybeSingle();
  
      if (error || !data) {
        console.log("Teacher lookup failed:", error?.message);

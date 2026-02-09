@@ -60,26 +60,40 @@
  
      setIsSubmitting(true);
      
-     const { error } = await signUp(signupData.email, signupData.password, {
-       name: signupData.name,
-       phone_number: signupData.phone,
-       sic_number: signupData.sicNumber,
-     });
- 
-     setIsSubmitting(false);
- 
-     if (error) {
-       if (error.message.includes("already registered")) {
-         toast.error("This email is already registered. Please login instead.");
-       } else if (error.message.includes("duplicate key")) {
-         toast.error("This SIC number or email is already registered.");
-       } else {
-         toast.error(error.message);
-       }
-       return;
-     }
- 
-     toast.success("Registration successful! Please check your email to verify your account.");
+      const { error } = await signUp(signupData.email, signupData.password, {
+        name: signupData.name,
+        phone_number: signupData.phone,
+        sic_number: signupData.sicNumber,
+      });
+
+      setIsSubmitting(false);
+
+      if (error) {
+        if (error.message.includes("already registered")) {
+          toast.error("This email is already registered. Please login instead.");
+        } else if (error.message.includes("duplicate key")) {
+          toast.error("This SIC number or email is already registered.");
+        } else {
+          toast.error(error.message);
+        }
+        return;
+      }
+
+      // Fetch the teacher's visit order to show them
+      const { data: teacherData } = await supabase
+        .from("teachers")
+        .select("visit_order")
+        .eq("faculty_email", signupData.email)
+        .single();
+
+      const visitOrder = teacherData?.visit_order;
+      if (visitOrder && visitOrder <= 10) {
+        toast.success(`🎉 Registration successful! You are visitor #${visitOrder} — you're eligible for a voucher! Check your email.`, { duration: 8000 });
+      } else if (visitOrder) {
+        toast.success(`Registration successful! You are visitor #${visitOrder}. Check your email to verify your account.`, { duration: 6000 });
+      } else {
+        toast.success("Registration successful! Please check your email to verify your account.");
+      }
    };
  
    const handleLogin = async (e: React.FormEvent) => {

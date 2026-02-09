@@ -1,10 +1,10 @@
- import { useState, useEffect } from "react";
- import { useNavigate, Link } from "react-router-dom";
- import { Button } from "@/components/ui/button";
- import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake } from "lucide-react";
- import { toast } from "sonner";
- import { useAuth } from "@/hooks/useAuth";
- import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake, Mail } from "lucide-react";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
  
  interface VoucherType {
    id: string;
@@ -48,10 +48,11 @@
  const Vouchers = () => {
    const navigate = useNavigate();
    const { user, teacher, loading } = useAuth();
-   const [claiming, setClaiming] = useState(false);
-   const [hasClaimed, setHasClaimed] = useState(false);
-   const [claimedVoucher, setClaimedVoucher] = useState<string | null>(null);
-   const [eligibleVoucher, setEligibleVoucher] = useState<VoucherType | null>(null);
+  const [claiming, setClaiming] = useState(false);
+  const [hasClaimed, setHasClaimed] = useState(false);
+  const [claimedVoucher, setClaimedVoucher] = useState<string | null>(null);
+  const [eligibleVoucher, setEligibleVoucher] = useState<VoucherType | null>(null);
+  const [sendingEmails, setSendingEmails] = useState(false);
  
    useEffect(() => {
      if (!loading && !user) {
@@ -116,10 +117,24 @@
        return;
      }
  
-     setHasClaimed(true);
-     setClaimedVoucher(eligibleVoucher.id);
-     toast.success("Voucher claimed successfully! 🎉");
-   };
+    setHasClaimed(true);
+    setClaimedVoucher(eligibleVoucher.id);
+    toast.success("Voucher claimed successfully! 🎉");
+  };
+
+  const handleSendEmailsToAll = async () => {
+    setSendingEmails(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-voucher-email", {
+        body: { send_to_all_eligible: true },
+      });
+      if (error) throw error;
+      toast.success(`${data?.message || "Emails sent to eligible teachers!"}`);
+    } catch (err: any) {
+      toast.error("Failed to send emails: " + (err.message || "Unknown error"));
+    }
+    setSendingEmails(false);
+  };
  
    if (loading) {
      return (
@@ -216,8 +231,21 @@
            )}
          </div>
  
-         {/* Voucher Guide */}
-         <div className="mx-auto mt-12 max-w-3xl">
+          {/* Admin: Send Emails */}
+          <div className="mx-auto mt-8 max-w-md text-center">
+            <Button
+              onClick={handleSendEmailsToAll}
+              disabled={sendingEmails}
+              variant="outline"
+              className="border-gold/30 text-gold hover:bg-gold/10"
+            >
+              <Mail className="mr-2 h-4 w-4" />
+              {sendingEmails ? "SENDING..." : "SEND CLAIM EMAILS TO ALL ELIGIBLE"}
+            </Button>
+          </div>
+
+          {/* Voucher Guide */}
+          <div className="mx-auto mt-12 max-w-3xl">
            <h3 className="mb-6 text-center font-display text-xl tracking-wider text-gold">
              Voucher Distribution
            </h3>

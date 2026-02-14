@@ -24,7 +24,15 @@ function getVoucherForPosition(position: number) {
   return voucherTypes.find((v) => v.positions.includes(position));
 }
 
+function formatPhoneNumber(phone: string): string {
+  const cleaned = phone.replace(/\s+/g, "").replace(/-/g, "");
+  if (cleaned.startsWith("+")) return cleaned;
+  // Default to India country code
+  return `+91${cleaned}`;
+}
+
 async function sendSms(to: string, body: string) {
+  to = formatPhoneNumber(to);
   const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID");
   const authToken = Deno.env.get("TWILIO_AUTH_TOKEN");
   const fromNumber = Deno.env.get("TWILIO_PHONE_NUMBER");

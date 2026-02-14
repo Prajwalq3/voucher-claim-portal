@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake, Mail } from "lucide-react";
+import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -122,16 +122,16 @@ import { supabase } from "@/integrations/supabase/client";
     toast.success("Voucher claimed successfully! 🎉");
   };
 
-  const handleSendEmailsToAll = async () => {
+  const handleSendSmsToAll = async () => {
     setSendingEmails(true);
     try {
-      const { data, error } = await supabase.functions.invoke("send-voucher-email", {
+      const { data, error } = await supabase.functions.invoke("send-voucher-sms", {
         body: { send_to_all_eligible: true },
       });
       if (error) throw error;
-      toast.success(`${data?.message || "Emails sent to eligible teachers!"}`);
+      toast.success(`${data?.message || "SMS sent to eligible teachers!"}`);
     } catch (err: any) {
-      toast.error("Failed to send emails: " + (err.message || "Unknown error"));
+      toast.error("Failed to send SMS: " + (err.message || "Unknown error"));
     }
     setSendingEmails(false);
   };
@@ -233,14 +233,14 @@ import { supabase } from "@/integrations/supabase/client";
  
           {/* Admin: Send Emails */}
           <div className="mx-auto mt-8 max-w-md text-center">
-            <Button
-              onClick={handleSendEmailsToAll}
+          <Button
+              onClick={handleSendSmsToAll}
               disabled={sendingEmails}
               variant="outline"
               className="border-gold/30 text-gold hover:bg-gold/10"
             >
-              <Mail className="mr-2 h-4 w-4" />
-              {sendingEmails ? "SENDING..." : "SEND CLAIM EMAILS TO ALL ELIGIBLE"}
+              <MessageSquare className="mr-2 h-4 w-4" />
+              {sendingEmails ? "SENDING..." : "SEND CLAIM SMS TO ALL ELIGIBLE"}
             </Button>
           </div>
 

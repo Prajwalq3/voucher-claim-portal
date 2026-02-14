@@ -3,8 +3,8 @@ project_id = "ipaacwaozythcxfoxbee"
 [functions.lookup-teacher]
 verify_jwt = false
 
-[functions.send-voucher-email]
+[functions.send-voucher-sms]
 verify_jwt = false
 
-[functions.trigger-voucher-email]
+[functions.trigger-voucher-sms]
 verify_jwt = false

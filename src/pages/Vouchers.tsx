@@ -5,7 +5,7 @@ import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake } from "lucide-re
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import AdminSmsSection from "@/components/AdminSmsSection";
+
  
  interface VoucherType {
    id: string;
@@ -219,8 +219,6 @@ import AdminSmsSection from "@/components/AdminSmsSection";
            )}
          </div>
  
-          {/* Admin SMS Panel */}
-          <AdminSmsSection />
 
           {/* Voucher Guide */}
           <div className="mx-auto mt-12 max-w-3xl">

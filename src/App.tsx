@@ -7,8 +7,9 @@
  import Index from "./pages/Index";
  import Auth from "./pages/Auth";
  import Vouchers from "./pages/Vouchers";
- import Events from "./pages/Events";
- import NotFound from "./pages/NotFound";
+import Events from "./pages/Events";
+import Admin from "./pages/Admin";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -23,8 +24,9 @@ const App = () => (
              <Route path="/" element={<Index />} />
              <Route path="/auth" element={<Auth />} />
              <Route path="/vouchers" element={<Vouchers />} />
-             <Route path="/events" element={<Events />} />
-             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="/events" element={<Events />} />
+              <Route path="/admin" element={<Admin />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
              <Route path="*" element={<NotFound />} />
            </Routes>
          </BrowserRouter>

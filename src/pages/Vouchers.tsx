@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake, MessageSquare } from "lucide-react";
+import { Coffee, UtensilsCrossed, Gift, Check, ArrowLeft, Cake } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import AdminSmsSection from "@/components/AdminSmsSection";
  
  interface VoucherType {
    id: string;
@@ -52,7 +53,7 @@ import { supabase } from "@/integrations/supabase/client";
   const [hasClaimed, setHasClaimed] = useState(false);
   const [claimedVoucher, setClaimedVoucher] = useState<string | null>(null);
   const [eligibleVoucher, setEligibleVoucher] = useState<VoucherType | null>(null);
-  const [sendingEmails, setSendingEmails] = useState(false);
+  
  
    useEffect(() => {
      if (!loading && !user) {
@@ -122,19 +123,6 @@ import { supabase } from "@/integrations/supabase/client";
     toast.success("Voucher claimed successfully! 🎉");
   };
 
-  const handleSendSmsToAll = async () => {
-    setSendingEmails(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("send-voucher-sms", {
-        body: { send_to_all_eligible: true },
-      });
-      if (error) throw error;
-      toast.success(`${data?.message || "SMS sent to eligible teachers!"}`);
-    } catch (err: any) {
-      toast.error("Failed to send SMS: " + (err.message || "Unknown error"));
-    }
-    setSendingEmails(false);
-  };
  
    if (loading) {
      return (
@@ -231,18 +219,8 @@ import { supabase } from "@/integrations/supabase/client";
            )}
          </div>
  
-          {/* Admin: Send Emails */}
-          <div className="mx-auto mt-8 max-w-md text-center">
-          <Button
-              onClick={handleSendSmsToAll}
-              disabled={sendingEmails}
-              variant="outline"
-              className="border-gold/30 text-gold hover:bg-gold/10"
-            >
-              <MessageSquare className="mr-2 h-4 w-4" />
-              {sendingEmails ? "SENDING..." : "SEND CLAIM SMS TO ALL ELIGIBLE"}
-            </Button>
-          </div>
+          {/* Admin SMS Panel */}
+          <AdminSmsSection />
 
           {/* Voucher Guide */}
           <div className="mx-auto mt-12 max-w-3xl">

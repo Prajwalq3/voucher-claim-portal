@@ -178,17 +178,17 @@
  
          {/* Header */}
          <div className="mb-12 text-center">
-           <div className="mb-4 flex items-center justify-center gap-3">
-             <Calendar className="h-8 w-8 text-gold" />
-             <span className="font-display text-sm tracking-[0.3em] text-gold">EXCLUSIVE ACCESS</span>
-             <Calendar className="h-8 w-8 text-gold" />
-           </div>
-           <h1 className="font-heading text-4xl font-semibold italic text-cream md:text-5xl lg:text-6xl">
-             Event Seat Booking
-           </h1>
-           <p className="mt-4 text-cream/70">
-             First 20 faculty members can reserve their seats!
-           </p>
+            <div className="mb-4 flex items-center justify-center gap-3">
+              <Calendar className="h-8 w-8 text-gold" />
+              <span className="font-display text-sm tracking-[0.3em] text-gold">EVENTS</span>
+              <Calendar className="h-8 w-8 text-gold" />
+            </div>
+            <h1 className="font-heading text-4xl font-semibold italic text-cream md:text-5xl lg:text-6xl">
+              Event Seat Booking
+            </h1>
+            <p className="mt-4 text-cream/70">
+              Reserve your seat for upcoming events!
+            </p>
          </div>
  
          {/* Teacher Info */}
